@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Amazon.com invoice amounts on order history
 // @namespace    http://tampermonkey.net/
-// @version      1.0.3
+// @version      1.0.4
 // @description  Display invoice amounts on the Amazon order history page. Useful for matching Amazon orders to transactions
 // @author       Kevin McCarpenter (kcarp)
 // @match        https://www.amazon.*/gp/*/order-history*
-// @updateURL    https://jsbin.amazon.com/xabadotuq.user.js
+// @updateURL    https://raw.githubusercontent.com/kwcarpenter/greasemonkey/master/amazonInvoice.js
+// @downloadURL  https://raw.githubusercontent.com/kwcarpenter/greasemonkey/master/amazonInvoice.js
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js
 // @grant        none
 // ==/UserScript==
