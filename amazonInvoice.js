@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Amazon.com invoice amounts on order history
 // @namespace    http://tampermonkey.net/
-// @version      1.0.5
+// @version      1.0.6
 // @description  Display invoice amounts on the Amazon order history page. Useful for matching Amazon orders to transactions
 // @author       Kevin McCarpenter
 // @match        https://www.amazon.com/gp/*/order-history*
@@ -40,19 +40,27 @@
                     // find invoice values
                     var responseDom = $.parseHTML(response);
                     console.log(responseDom);
-                    var shipments = $(responseDom).find('tr tr tr tr tr').filter(function(index, element) {
-                        console.log(element);
-                        return $(element).text().match(/Shipment/) && $(element).text().match(/\$\d+\.\d{2}/);
+                    var shipments = $(responseDom).find('tr tr tr tr').filter(function(index, element) {
+                        return $(element).text().match(/transaction/) && $(element).text().match(/\$\d+\.\d{2}/);
                     });
 
                     // add invoice values to order dom
                     var costSpanStr = '';
                     shipments.each(function(index, shipment) {
-                        var matches = /\$\d+\.\d{2}/.exec($(shipment).text())
-                        console.log(matches);
-                        for(var i = 0; i < matches.length; i++) {
-                            costSpanStr += (' ' + matches[i]);
-                        }
+                        // shipments are broken up into transactions. We need the transactions, not the shipments.
+                        var transactions = $(shipment).find('tr td').filter(function (index, element) {
+                            console.log($(element));
+                            return $(element).attr('align') == 'right';
+                        });
+                        transactions.each(function (index, transaction) {
+                            var matches = /\$\d+\.\d{2}/g.exec($(transaction).text())
+                            console.log(matches);
+                            if (matches) {
+                                for(var i = 0; i < matches.length; i++) {
+                                    costSpanStr += (' ' + matches[i]);
+                                }
+                            }
+                        });
                     });
                     costSpan.text(costSpanStr);
                 })
